@@ -1,24 +1,38 @@
-📘 Django Blog Practice
+# 🧠 Django Blog Practice
 
-This project is a blog application built as a practice exercise based on the Python Crash Course book.
+This is a small Django practice project based on exercises from *Python Crash Course*.
 
-It provides a simple implementation of the Django Web Framework, demonstrating the core MTV (Model–Template–View) architecture.
+Exercise: 19-2 Blog Accounts
 
-🧠 Key Concepts
-URLs (Routing)
-Defined in urls.py, responsible for mapping requests to views
-Views (Logic & Data)
-Implemented in views.py, handling business logic and database interaction
-Forms & Templates (Rendering)
-forms.py validates user input, while templates render dynamic HTML pages
-🛠️ How to Run
-Create and activate a virtual environment
-Install dependencies:
-pip install -r requirements.txt
-Apply migrations:
-python manage.py migrate
-Run server:
-python manage.py runserver
-📌 Notes
+Current progress:
 
-This is an initial practice project for learning Django fundamentals and understanding how its core components work together.
+- basic blog pages
+- create and edit blog content
+- user registration
+- login and logout
+- signed-in username display in the navigation
+
+## 🛠️ Tech Stack
+
+- Python
+- Django
+- SQLite
+
+
+## 🔗 Account Routes
+
+- `/accounts/register/`
+- `/accounts/login/`
+- `/accounts/logout/`
+
+## 📘 Learning Notes
+
+- reinforced Django's `MTV` structure: `Model`, `Template`, and `View`
+- Django's built-in login and registration system
+- learned the basic logic of account registration, login, and logout
+- practiced the redirect flow from registration to login and logout to build a basic user system
+- how Django manages(Collect and store username and password) user accounts
+
+## ⚠️ Note
+
+This project is still in progress and is mainly for learning Django basics.
