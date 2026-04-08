@@ -1,16 +1,16 @@
 <div>
-  <a href="{% url 'blogs:index' %}">Blog Home</a> --   
-  <a href="{% url 'blogs:blogs' %}">All Blogs</a> --  
+  <a href="{% url 'blogs:index' %}">Blog Home</a> --
+  <a href="{% url 'blogs:blogs' %}">All Blogs</a> --
   {% if user.is_authenticated %}
-    - Welcome! {{ user.username }} <span>|</span>
-    <form action="{% url 'accounts:logout' %}" method="post" style="display: inline; margin: 0 0 0 6px;">
-      {% csrf_token %}
-      <input type="hidden" name="next" value="{% url 'blogs:index' %}" />
-      <button name="submit">Log out</button>
-    </form>
+  Welcome! {{ user.username }} <span>|</span>
+  <form action="{% url 'accounts:logout' %}" method="post" style="display: inline; margin: 0 0 0 6px;">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{% url 'blogs:index' %}" />
+    <button name="submit">Log out</button>
+  </form>
   {% else %}
-    <a href="{% url 'accounts:login' %}">Log in</a>  --   
-    <a href="{% url 'accounts:register' %}">Register</a>
+  <a href="{% url 'accounts:login' %}">Log in</a> --
+  <a href="{% url 'accounts:register' %}">Register</a>
   {% endif %}
 </div>
 

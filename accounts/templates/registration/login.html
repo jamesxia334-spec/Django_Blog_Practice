@@ -12,6 +12,6 @@
     {{ form.as_p }}
 
     <button name="submit">Log in</button>
-    <input type="hidden" name="next" value="{% url 'blogs:index' %}" />
+    <input type="hidden" name="next" value="{{ next }}">
   </form>
 {% endblock content %}

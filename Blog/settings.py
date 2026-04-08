@@ -126,5 +126,6 @@ STATIC_URL = 'static/'
 
 
 # My settings.
-LOGIN_REDIRECT_URL = 'learning_logs:index'
-LOGOUT_REDIRECT_URL = 'learning_logs:index'
+LOGIN_REDIRECT_URL = 'blogs:index'
+LOGOUT_REDIRECT_URL = 'blogs:index'
+LOGIN_URL = 'accounts:login'

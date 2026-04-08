@@ -2,15 +2,13 @@
 
 This is a small Django practice project based on exercises from *Python Crash Course*.
 
-Exercise: 19-2 Blog Accounts
+Exercise: 19-3 Protected Blog
 
 Current progress:
 
-- basic blog pages
-- create and edit blog content
-- user registration
-- login and logout
-- signed-in username display in the navigation
+- corrected the "edit entry" button text to "edit post"
+- fixed a bug where logging in would always redirect to the homepage instead of the originally requested page
+- modified the database schema by adding an `owner` field to protect user data, restricting access so users can only view their own data
 
 ## 🛠️ Tech Stack
 
@@ -28,10 +26,9 @@ Current progress:
 ## 📘 Learning Notes
 
 - reinforced Django's `MTV` structure: `Model`, `Template`, and `View`
-- Django's built-in login and registration system
-- learned the basic logic of account registration, login, and logout
-- practiced the redirect flow from registration to login and logout to build a basic user system
-- how Django manages(Collect and store username and password) user accounts
+- how Django manages (collect and store username and password) user accounts
+- data protection by associating data with specific users via foreign keys (`owner`)
+- handling access control to restrict users from viewing or modifying others' data
 
 ## ⚠️ Note
 
