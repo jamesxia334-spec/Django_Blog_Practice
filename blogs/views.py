@@ -61,6 +61,26 @@ def new_blog(request):
     return render(request, 'blogs/new_blog.html', context)
 
 @login_required
+def edit_blog(request, blog_id):
+    """Edit an existing blog."""
+    blog = Blog.objects.get(id=blog_id)
+    # Make sure the blog belongs to the current user.
+    check_topic_user(blog.owner, request.user)
+
+    if request.method != 'POST':
+        # Initial request; pre-fill form with the current blog.
+        form = BlogForm(instance=blog)
+    else:
+        # POST data submitted; process data.
+        form = BlogForm(instance=blog, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blogs:blog', blog_id=blog.id)
+
+    context = {'blog': blog, 'form': form}
+    return render(request, 'blogs/edit_blog.html', context)
+
+@login_required
 def new_blog_post(request, blog_id):
     """Add a new post for a particular blog."""
     blog = Blog.objects.get(id=blog_id)

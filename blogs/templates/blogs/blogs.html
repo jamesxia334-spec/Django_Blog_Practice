@@ -7,6 +7,8 @@
   {% for blog in blogs %}
   <li>
     <a href="{% url 'blogs:blog' blog.id %}">{{ blog.title }}</a>
+    <a href="{% url 'blogs:edit_blog' blog.id %}" style="margin-left: 20px; 
+    font-size: 1.0em; color: blue;">(Edit blog title)</a>
   </li>
   {% empty %}
   <li>No blogs have been added yet.</li>

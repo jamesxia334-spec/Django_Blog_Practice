@@ -13,4 +13,7 @@ class BlogPostForm(forms.ModelForm):
         model = BlogPost
         fields = ['title', 'body']
         labels = {'title': 'Post Title', 'body': ''}
-        widgets = {'body': forms.Textarea(attrs={'cols': 80})}
+        widgets = {
+            'title': forms.TextInput(attrs={'size': 50}),
+            'body': forms.Textarea(attrs={'cols': 80}),
+        }
