@@ -1,8 +1,14 @@
 {% extends "blogs/base.html" %}
 
 {% block content %}
-<p>Blog: {{ blog.title }} <a href="{% url 'blogs:edit_blog' blog.id %}" style="margin-left: 20px; 
-font-size: 1.0em; color: blue;">(Edit blog)</a></p>
+<p>Blog: {{ blog.title }} <a href="{% url 'blogs:edit_blog' blog.id %}"
+    style="margin-left: 20px; font-size: 1.0em; color: blue;">(Edit blog)</a>
+  <a href="#"
+    onclick="if(prompt('Warning! This will delete the blog and ALL related posts. Type \'DELETE\' to confirm:') === 'DELETE') { document.getElementById('delete-blog-{{ blog.id }}').submit(); } return false;"
+    style="margin-left: 20px; font-size: 1.0em; color: red;">Delete Blog</a>
+<form id="delete-blog-{{ blog.id }}" action="{% url 'blogs:delete_blog' blog.id %}" method="post"
+  style="display: none;">{% csrf_token %}</form>
+</p>
 {% if blog.subtitle %}
 <p>Subtitle: {{ blog.subtitle }}</p>
 {% endif %}
@@ -20,6 +26,11 @@ font-size: 1.0em; color: blue;">(Edit blog)</a></p>
 
     <p>{{ post.date_added|date:'M d, Y H:i' }}
       <a href="{% url 'blogs:edit_blog_post' post.id %}" style="margin-left: 50px;"> Edit post</a>
+      <a href="#"
+        onclick="if(confirm('Are you sure you want to delete this post?')) { document.getElementById('delete-post-{{ post.id }}').submit(); } return false;"
+        style="margin-left: 20px; color: red;">Delete Post</a>
+    <form id="delete-post-{{ post.id }}" action="{% url 'blogs:delete_blog_post' post.id %}" method="post"
+      style="display: none;">{% csrf_token %}</form>
     </p>
     <p>{{ post.title }}</p>
 

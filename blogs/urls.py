@@ -20,4 +20,8 @@ urlpatterns = [
     path('edit_blog/<int:blog_id>/', views.edit_blog, name='edit_blog'),
     # Page for editing a blog post.
     path('edit_blog_post/<int:post_id>/', views.edit_blog_post, name='edit_blog_post'),
+    # Route to delete a blog
+    path('delete_blog/<int:blog_id>/', views.delete_blog, name='delete_blog'),
+    # Route to delete a blog post
+    path('delete_blog_post/<int:post_id>/', views.delete_blog_post, name='delete_blog_post'),
 ]

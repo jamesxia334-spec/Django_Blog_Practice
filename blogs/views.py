@@ -128,3 +128,31 @@ def edit_blog_post(request, post_id):
 
     context = {'post': post, 'blog': blog, 'form': form}
     return render(request, 'blogs/edit_blog_post.html', context)
+
+
+@login_required
+def delete_blog(request, blog_id):
+    """Delete an existing blog and all its posts."""
+    blog = Blog.objects.get(id=blog_id)
+    # Make sure the blog belongs to the current user.
+    check_topic_user(blog.owner, request.user)
+
+    if request.method == 'POST':
+        blog.delete()
+        return redirect('blogs:blogs')
+        
+    return redirect('blogs:blog', blog_id=blog.id)
+
+
+@login_required
+def delete_blog_post(request, post_id):
+    """Delete an existing blog post."""
+    post = BlogPost.objects.get(id=post_id)
+    blog = post.blog
+    # Make sure the blog belongs to the current user.
+    check_topic_user(blog.owner, request.user)
+
+    if request.method == 'POST':
+        post.delete()
+        
+    return redirect('blogs:blog', blog_id=blog.id)
