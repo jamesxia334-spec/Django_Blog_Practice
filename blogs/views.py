@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .models import Blog, BlogPost
 from .forms import BlogForm, BlogPostForm
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 # Create your views here.
 
@@ -54,7 +54,11 @@ def new_blog(request):
             new_blog = form.save(commit=False)
             new_blog.owner = request.user
             new_blog.save()
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'id': new_blog.id, 'title': new_blog.title})
             return redirect('blogs:blogs')
+        elif request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'errors': form.errors}, status=400)
 
     # Display a blank or invalid form.
     context = {'form': form}
@@ -90,10 +94,10 @@ def new_blog_post(request, blog_id):
 
     if request.method != 'POST':
         # No data submitted; create a blank form.
-        form = BlogPostForm()
+        form = BlogPostForm(initial={'blog': blog}, user=request.user)
     else:
         # POST data submitted; process data.
-        form = BlogPostForm(data=request.POST)
+        form = BlogPostForm(data=request.POST, user=request.user)
         if form.is_valid():
             new_post = form.save(commit=False)
             new_post.blog = blog
@@ -114,10 +118,10 @@ def edit_blog_post(request, post_id):
 
     if request.method != 'POST':
         # Initial request; pre-fill form with the current post.
-        form = BlogPostForm(instance=post)
+        form = BlogPostForm(instance=post, user=request.user)
     else:
         # POST data submitted; process data.
-        form = BlogPostForm(instance=post, data=request.POST)
+        form = BlogPostForm(instance=post, data=request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('blogs:blog', blog_id=blog.id)

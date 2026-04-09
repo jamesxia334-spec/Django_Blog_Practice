@@ -10,4 +10,56 @@
     {{ form.as_p }}
     <button name="submit">Save changes</button>
   </form>
+
+  <script>
+    // Add '+' button dynamically next to the blog select dropdown
+    const selectElem = document.getElementById('id_blog');
+    if (selectElem) {
+      const addBtn = document.createElement('a');
+      addBtn.href = '#';
+      addBtn.id = 'add-blog-btn';
+      addBtn.title = 'Add a new blog';
+      addBtn.innerHTML = ' [ + add new blog ]';
+      addBtn.style.textDecoration = 'none';
+      addBtn.style.fontWeight = 'bold';
+      addBtn.style.marginLeft = '10px';
+      
+      selectElem.parentNode.insertBefore(addBtn, selectElem.nextSibling);
+
+      addBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        let title = prompt("Enter title here:");
+        if (!title) return; // cancelled or empty
+        
+        let subtitle = prompt("Enter subtitle here (optional):", "");
+        if (subtitle === null) return; // cancelled
+
+        let formData = new FormData();
+        formData.append('title', title);
+        formData.append('subtitle', subtitle);
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+        fetch("{% url 'blogs:new_blog' %}", {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.id && data.title) {
+            let option = document.createElement('option');
+            option.value = data.id;
+            option.text = data.title;
+            option.selected = true;
+            selectElem.add(option);
+          } else if (data.errors) {
+            alert('Error: ' + JSON.stringify(data.errors));
+          }
+        })
+        .catch(error => alert('Error creating blog.'));
+      });
+    }
+  </script>
 {% endblock content %}
