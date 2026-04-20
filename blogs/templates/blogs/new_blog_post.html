@@ -1,64 +1,98 @@
 {% extends "blogs/base.html" %}
 
 {% block content %}
-  <p><a href="{% url 'blogs:blog' blog.id %}">{{ blog.title }}</a></p>
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title mb-3">
+        <a href="{% url 'blogs:blog' blog.id %}" class="text-decoration-none">
+          {{ blog.title }}
+        </a>
+      </h3>
 
-  <p>Add a new post:</p>
-  <form action="{% url 'blogs:new_blog_post' blog.id %}" method='post'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit">Add post</button>
-  </form>
+      <p class="text-muted mb-4">Add a new post:</p>
 
-  <script>
-    // Add '+' button dynamically next to the blog select dropdown
-    const selectElem = document.getElementById('id_blog');
-    if (selectElem) {
-      const addBtn = document.createElement('a');
-      addBtn.href = '#';
-      addBtn.id = 'add-blog-btn';
-      addBtn.title = 'Add a new blog';
-      addBtn.innerHTML = ' [ + add new blog ]';
-      addBtn.style.textDecoration = 'none';
-      addBtn.style.fontWeight = 'bold';
-      addBtn.style.marginLeft = '10px';
-      
-      selectElem.parentNode.insertBefore(addBtn, selectElem.nextSibling);
+      <form action="{% url 'blogs:new_blog_post' blog.id %}" method="post">
+        {% csrf_token %}
 
-      addBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        let title = prompt("Enter title here:");
-        if (!title) return; // cancelled or empty
-        
-        let subtitle = prompt("Enter subtitle here (optional):", "");
-        if (subtitle === null) return; // cancelled
+        <!-- Form fields -->
+        <div class="mb-3">
+          {{ form.as_p }}
+        </div>
 
-        let formData = new FormData();
-        formData.append('title', title);
-        formData.append('subtitle', subtitle);
-        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        <!-- Submit button -->
+        <button type="submit" name="submit" class="btn btn-primary">
+          Add post
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
 
-        fetch("{% url 'blogs:new_blog' %}", {
-          method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.id && data.title) {
-            let option = document.createElement('option');
-            option.value = data.id;
-            option.text = data.title;
-            option.selected = true;
-            selectElem.add(option);
-          } else if (data.errors) {
-            alert('Error: ' + JSON.stringify(data.errors));
-          }
-        })
-        .catch(error => alert('Error creating blog.'));
+<script>
+  // Add Bootstrap styling and "+ Add new blog" button to the blog select dropdown
+  const selectElem = document.getElementById('id_blog');
+
+  if (selectElem) {
+    // Apply Bootstrap class to select element
+    selectElem.classList.add('form-select');
+
+    // Create button
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.id = 'add-blog-btn';
+    addBtn.className = 'btn btn-outline-success btn-sm ms-2';
+    addBtn.innerHTML = '+ Add new blog';
+
+    // Create flex container to align elements horizontally
+    const wrapper = document.createElement('div');
+    wrapper.className = 'd-flex align-items-center';
+
+    selectElem.parentNode.insertBefore(wrapper, selectElem);
+    wrapper.appendChild(selectElem);
+    wrapper.appendChild(addBtn);
+
+    // Handle button click to create a new blog via prompt
+    addBtn.addEventListener('click', function() {
+      let title = prompt("Enter title here:");
+      if (!title) return;
+
+      let subtitle = prompt("Enter subtitle here (optional):", "");
+      if (subtitle === null) return;
+
+      let formData = new FormData();
+      formData.append('title', title);
+      formData.append('subtitle', subtitle);
+      formData.append(
+        'csrfmiddlewaretoken',
+        document.querySelector('[name=csrfmiddlewaretoken]').value
+      );
+
+      // Send AJAX request to create blog
+      fetch("{% url 'blogs:new_blog' %}", {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Update select dropdown on success
+        if (data.id && data.title) {
+          let option = document.createElement('option');
+          option.value = data.id;
+          option.text = data.title;
+          option.selected = true;
+          selectElem.add(option);
+        } else if (data.errors) {
+          alert('Error: ' + JSON.stringify(data.errors));
+        }
+      })
+      .catch(error => {
+        alert('Error creating blog.');
       });
-    }
-  </script>
+    });
+  }
+</script>
 {% endblock content %}

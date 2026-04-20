@@ -1,20 +1,48 @@
 {% extends "blogs/base.html" %}
 
-{% block content %}
-<p>Blogs</p>
-<a href="{% url 'blogs:new_blog' %}">Add a new blog</a>
-<ul>
-  {% for blog in blogs %}
-  <li>
-    <a href="{% url 'blogs:blog' blog.id %}">{{ blog.title }}</a>
-    <a href="{% url 'blogs:edit_blog' blog.id %}" style="margin-left: 20px; font-size: 1.0em; color: blue;">(Edit blog title)</a>
-    <a href="#" onclick="if(prompt('Warning! This will delete the blog and ALL related posts. Type \'DELETE\' to confirm:') === 'DELETE') { document.getElementById('delete-blog-{{ blog.id }}').submit(); } return false;" style="margin-left: 20px; font-size: 1.0em; color: red;">Delete Blog</a>
-    <form id="delete-blog-{{ blog.id }}" action="{% url 'blogs:delete_blog' blog.id %}" method="post" style="display: none;">{% csrf_token %}</form>
-  </li>
-  {% empty %}
-  <li>No blogs have been added yet.</li>
-  {% endfor %}
-</ul>
+{% block page_header %}
+  <h1>Blogs</h1>
+{% endblock page_header %}
 
+{% block content %}
+
+  <ul class="list-group border-bottom pb-2 mb-4">
+    {% for blog in blogs %}
+      <li class="list-group-item border-0">
+        
+        <a href="{% url 'blogs:blog' blog.id %}">
+          {{ blog.title }}
+        </a>
+
+        <a href="{% url 'blogs:edit_blog' blog.id %}"
+           class="btn btn-sm btn-outline-primary ms-4 me-2">
+          Edit
+        </a>
+
+        <a href="#"
+           class="btn btn-sm btn-outline-danger ms-3"
+           onclick="if(prompt('Warning! This will delete the blog and ALL related posts. Type \'DELETE\' to confirm:') === 'DELETE') { document.getElementById('delete-blog-{{ blog.id }}').submit(); } return false;">
+          Delete
+        </a>
+
+        <form id="delete-blog-{{ blog.id }}"
+              action="{% url 'blogs:delete_blog' blog.id %}"
+              method="post"
+              style="display: none;">
+          {% csrf_token %}
+        </form>
+
+      </li>
+
+    {% empty %}
+      <li class="list-group-item border-0">
+        No blogs have been added yet.
+      </li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'blogs:new_blog' %}" class="btn btn-primary">
+    Add a new blog
+  </a>
 
 {% endblock content %}

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     #My Apps
     'blogs',
     'accounts',
+    'django_bootstrap5',
 
 
     # Default django apps.

@@ -1,14 +1,44 @@
 {% extends "blogs/base.html" %}
+{% load django_bootstrap5 %}
 
 {% block content %}
-<p><a href="{% url 'blogs:blog' blog.id %}">{{ blog.title }}</a></p>
+<div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-body">
 
-<p>Edit blog:</p>
+      <!-- Blog title -->
+      <h3 class="card-title mb-3">
+        <a href="{% url 'blogs:blog' blog.id %}" class="text-decoration-none">
+          {{ blog.title }}
+        </a>
+      </h3>
 
-<form action="{% url 'blogs:edit_blog' blog.id %}" method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button name="submit">Save changes</button>
-</form>
+      <!-- Edit section label -->
+      <p class="text-muted mb-4">Edit blog:</p>
 
+      <!-- Edit form -->
+      <form action="{% url 'blogs:edit_blog' blog.id %}" method="post">
+        {% csrf_token %}
+
+        <!-- Title field (custom full width) -->
+        <div class="mb-3">
+          {% bootstrap_field form.title layout="vertical" %}
+        </div>
+
+        <!-- Subtitle field (custom full width) -->
+        <div class="mb-3">
+          {% bootstrap_field form.subtitle layout="vertical" %}
+        </div>
+
+        <!-- Other fields (auto render) -->
+        {% bootstrap_form form exclude='title,subtitle' %}
+
+        <!-- Submit button -->
+        {% bootstrap_button button_type="submit" content="Save changes" %}
+
+      </form>
+
+    </div>
+  </div>
+</div>
 {% endblock content %}
